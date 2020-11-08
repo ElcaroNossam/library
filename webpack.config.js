@@ -1,12 +1,30 @@
+const path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 const createExpoWebpackConfigAsync = require('@expo/webpack-config');
   
-  module.exports = async function(env, argv) {
-    const config = await createExpoWebpackConfigAsync(env, argv);
-    // Customize the config before returning it.
-    config.performance = {
-             ...config.performance,
-             maxAssetSize: 550000,
-           };
-        
-            return config;
-          };
+module.exports = {
+
+  performance: {
+    hints: process.env.NODE_ENV === 'production' ? "warning" : false,
+    maxEntrypointSize: 512000,
+    maxAssetSize: 512000
+},
+
+entry: {
+  app: './src/index.js',
+  print:'./src/print.js'
+},
+devtool: 'inline-source-map',
+plugins: [
+  new CleanWebpackPlugin(['dist']),
+  new HtmlWebpackPlugin({
+      title: 'Output Management'
+  })
+],
+output: {
+  filename: '[name].bundle.js',
+  path: path.resolve(__dirname, 'dist')
+}
+
+
+};
